@@ -1,11 +1,20 @@
-import React from 'react'
+import React from "react";
+import { Box } from "@mui/material";
+
+import HeroBanner from "../HeroBanner";
+import Exercises from "../Exercises";
+import SearchExercise from "../SearchExercise";
 
 const Home = () => {
   return (
-    <div>
-      home
-    </div>
-  )
-}
+    <Box>
+      <HeroBanner />
+      <SearchExercise
+      />
+      <Exercises 
+      />
+    </Box>
+  );
+};
 
-export default Home
+export default Home;
