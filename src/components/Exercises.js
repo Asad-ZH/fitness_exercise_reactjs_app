@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import { Box, Stack, Typography } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { exerciseOptions, fetchData } from '../utils/fetchData';
 import ExerciseCard from "./ExerciseCard";
 // import Loader from './Loader';
 
-const Exercises = ({ exercises, setExercises, bodyPart }) => {
+const Exercises = ({ exercises, setExercises, bodyPart , isLoading}) => {
 
-  useEffect(() => {
-    const fetchExercisesData = async () => {
-      let exercisesData = [];
-      if (bodyPart === 'all') {
-        exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions);
-      } else {
-        exercisesData = await fetchData(`https://exercisedb.p.rapidapi.com/exercises/${bodyPart}`, exerciseOptions);
-      }
-      console.log("exercisesData" + exercisesData);
-      setExercises(exercisesData);
-    };
+  // useEffect(() => {
+  //   const fetchExercisesData = async () => {
+  //     let exercisesData = [];
+  //     if (bodyPart === 'all') {
+  //       exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions);
+  //     } else {
+  //       exercisesData = await fetchData(`https://exercisedb.p.rapidapi.com/exercises/${bodyPart}`, exerciseOptions);
+  //     }
+  //     console.log("exercisesData" + exercisesData);
+  //     setExercises(exercisesData);
+  //   };
 
-    fetchExercisesData();
-  }, [bodyPart]);
+  //   fetchExercisesData();
+  // }, [bodyPart]);
 
 
 
@@ -41,10 +42,14 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
         flexWrap="wrap"
         justifyContent="center"
       > 
-      {console.log("jp;a" + exercises)}
-        {exercises.map((exercise, idx) => (
+      {!isLoading ? (
+
+        exercises.map((exercise, idx) => (
           <ExerciseCard key={idx} exercise={exercise} />
-        ))}
+        ))
+      ): (
+        <CircularProgress />
+      )}
 
       </Stack>
     </Box>

@@ -9,6 +9,10 @@ const Home = () => {
   const [exercises, setExercises] = useState([]);
   const [bodyPart, setBodyPart] = useState("all");
 
+  const [isLoading, setLoading]  = useState (false)
+
+
+
   return (
     <Box>
       <HeroBanner />
@@ -16,11 +20,13 @@ const Home = () => {
         setExercises={setExercises}
         bodyPart={bodyPart}
         setBodyPart={setBodyPart}
+        setLoading={setLoading}
       />
       <Exercises
         setExercises={setExercises}
         exercises={exercises}
         bodyPart={bodyPart}
+        isLoading = {isLoading}
       />
     </Box>
   );

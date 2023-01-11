@@ -4,28 +4,36 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { exerciseOptions, fetchData } from "../utils/fetchData";
 import HorizontalScrollBar from "./HorizontalScrollBar";
 
-const SearchExercise = ({setExercises, bodyPart, setBodyPart}) => {
-  const [search, setSearch] = useState('');
+const SearchExercise = ({setExercises, bodyPart, setBodyPart, setLoading}) => {
+  const [search, setSearch] = useState('chest');
   const [bodyParts, setBodyParts] = useState([]);
 
   useEffect(() => {
+    setLoading(true)
     const fetchExercisesData = async () => {
+
       const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions);
 
       setBodyParts(['all', ...bodyPartsData]);
     };
 
+    handleSearch()
     fetchExercisesData();
+
+    setLoading(false)
   }, []);
 
   const handleSearch = async () => {
+    setLoading(true)
     if (search) {
       const exercisesData = await fetch(
-        "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
+        "https://exercisedb.p.rapidapi.com/exercises",
         exerciseOptions
       );
 
-      const searchedExercises = exercisesData.filter(
+      const exercise =  await exercisesData.json()
+
+      const searchedExercises = exercise.filter(
         (exercise) =>
           exercise.name.toLocaleLowerCase().includes(search) ||
           exercise.target.toLocaleLowerCase().includes(search) ||
@@ -35,7 +43,8 @@ const SearchExercise = ({setExercises, bodyPart, setBodyPart}) => {
       );
       setSearch('');
       setExercises(searchedExercises);
-      console.log("searched exercises" + searchedExercises );
+      // console.log("searched exercises" + searchedExercises );
+      setLoading(false)
     }
   };
 
@@ -58,9 +67,8 @@ const SearchExercise = ({setExercises, bodyPart, setBodyPart}) => {
             backgroundColor: "#fff",
             borderRadius: "40px",
           }}
-          value={search}
           onChange={(e) => {
-            e.target.value.toLocaleLowerCase();
+            setSearch(e.target.value.toLocaleLowerCase());
           }}
           placeholder="Search Exercises"
           type="text"
@@ -78,7 +86,7 @@ const SearchExercise = ({setExercises, bodyPart, setBodyPart}) => {
             fontSize: { lg: "20px", xs: "14px" },
           }}
           onClick={() => {
-            handleSearch();
+             handleSearch();
           }}
         >
           Search
